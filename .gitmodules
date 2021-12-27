@@ -1,0 +1,3 @@
+[submodule "beancount_bot"]
+	path = beancount_bot
+	url = ./beancount_bot

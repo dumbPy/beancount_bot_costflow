@@ -1,28 +1,32 @@
 log:
-  # 日志等级
+  # Log level
   level: 'INFO'
 
 bot:
-  # 代理
-  proxy: ''
+  # Agent
+  proxy: null
 
+  # Telegram Robot Token
   # Telegram 机器人 Token
   token: ''
 
+  # Authentication with tokens. Used to verify identity when entering the robot for the first time
   # 鉴权用令牌。第一次进入机器人时用于校验身份
   auth_token: '123456'
 
-  # 机器人会话文件路径
-  session_file: '/config/bot.session'
+  # Robot session file path
+  session_file: 'bot.session'
 
 transaction:
-  # 账本文件。可以使用：{year}、{month}、{date}
-  beancount_file: '/bean/{year}/{month}.bean'
+  # Account book file. Available: {year}, {month}, {date}
+  beancount_file: 'beans/journal.beancount'
 
-  # 消息处理器
+  # Message Processor
   message_dispatcher:
-    # 模板
-    - class: 'beancount_bot.builtin.TemplateDispatcher'
+    # class must contain the complete module name, third-party plug-ins can set PYTHONPATH to load
+    # args Refer to the documentation of each processor
+    # Currently built template processor can be configured as follows
+    - class: 'beancount_bot.builtin.template_dispatcher.TemplateDispatcher'
       args:
         template_config: '/config/template.yml'
     # Costflow
@@ -31,18 +35,18 @@ transaction:
         costflow_config: '/config/costflow.json'
 
 schedule:
-  # 定时任务定义
-  # name：定时任务名，可以用 /task name 主动触发
-  # class：定时任务类
-  # args：创建任务需要的参数
+  # Regular tasks defined
+  # name: Timing task name, you can use /task name to trigger actively
+  # class: Timing task class
+  # args: Parameters needed to create a task
 
-  # 定时任务示例：定时更新价格
-  # 使用内建任务类：beancount_bot.builtin.DailyCommandTask
-  # 该类在每日 time 时执行指令，之后广播 message 消息
+  # Timing Example: regularly updated Price
+  # Use the built-in task class: beancount_bot.builtin.DailyCommandTask
+  # Class in daily instruction execution time, the broadcast message after message
   - name: price
     class: 'beancount_bot.builtin.DailyCommandTask'
     args:
       time: '21:30'
-      message: '当日价格更新完成'
+      message : ' The price update of the day is complete '
       commands:
         - 'bean-price /bean/main.bean >> /bean/automatic/prices.bean'
